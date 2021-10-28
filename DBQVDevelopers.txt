@@ -1,0 +1,468 @@
+USE [master]
+GO
+/****** Object:  Database [QvPedidos]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+CREATE DATABASE [QvPedidos]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'QvPedidos', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\QvPedidos.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'QvPedidos_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\QvPedidos_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [QvPedidos] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [QvPedidos].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [QvPedidos] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [QvPedidos] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [QvPedidos] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [QvPedidos] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [QvPedidos] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [QvPedidos] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [QvPedidos] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [QvPedidos] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [QvPedidos] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [QvPedidos] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [QvPedidos] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [QvPedidos] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [QvPedidos] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [QvPedidos] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [QvPedidos] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [QvPedidos] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [QvPedidos] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [QvPedidos] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [QvPedidos] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [QvPedidos] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [QvPedidos] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [QvPedidos] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [QvPedidos] SET RECOVERY FULL 
+GO
+ALTER DATABASE [QvPedidos] SET  MULTI_USER 
+GO
+ALTER DATABASE [QvPedidos] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [QvPedidos] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [QvPedidos] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [QvPedidos] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [QvPedidos] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [QvPedidos] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'QvPedidos', N'ON'
+GO
+ALTER DATABASE [QvPedidos] SET QUERY_STORE = OFF
+GO
+USE [QvPedidos]
+GO
+/****** Object:  Table [dbo].[TB_Pedido_Detalle]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TB_Pedido_Detalle](
+	[ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[idEncabezado] [bigint] NOT NULL,
+	[idProducto] [bigint] NOT NULL,
+	[numCantidad] [int] NOT NULL,
+	[curValorUnitario] [money] NOT NULL,
+	[dtmFechaCreacion] [date] NOT NULL,
+ CONSTRAINT [PK_TB_Pedido_Detalle] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TB_Pedido_Encabezado]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TB_Pedido_Encabezado](
+	[ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[numPedido] [int] NOT NULL,
+	[idUsuario] [bigint] NOT NULL,
+	[curValorTotal] [money] NOT NULL,
+	[dtmFechaCreacion] [date] NOT NULL,
+ CONSTRAINT [PK_TB_Pedido_Encabezado] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TB_Producto]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TB_Producto](
+	[ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[strDescripcion] [varchar](100) NOT NULL,
+	[curValor] [money] NOT NULL,
+ CONSTRAINT [PK_TB_Producto] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TB_Usuarios]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TB_Usuarios](
+	[ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[strUsuario] [varchar](50) NOT NULL,
+	[strPassword] [varchar](20) NOT NULL,
+	[strNombre] [varchar](150) NOT NULL,
+ CONSTRAINT [PK_TB_Usuarios] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[TB_Pedido_Detalle] ON 
+GO
+INSERT [dbo].[TB_Pedido_Detalle] ([ID], [idEncabezado], [idProducto], [numCantidad], [curValorUnitario], [dtmFechaCreacion]) VALUES (17, 9, 8, 3, 30000.0000, CAST(N'2021-10-27' AS Date))
+GO
+INSERT [dbo].[TB_Pedido_Detalle] ([ID], [idEncabezado], [idProducto], [numCantidad], [curValorUnitario], [dtmFechaCreacion]) VALUES (19, 8, 8, 3, 30000.0000, CAST(N'2021-10-27' AS Date))
+GO
+INSERT [dbo].[TB_Pedido_Detalle] ([ID], [idEncabezado], [idProducto], [numCantidad], [curValorUnitario], [dtmFechaCreacion]) VALUES (22, 10, 12, 4, 8000.0000, CAST(N'2021-10-27' AS Date))
+GO
+INSERT [dbo].[TB_Pedido_Detalle] ([ID], [idEncabezado], [idProducto], [numCantidad], [curValorUnitario], [dtmFechaCreacion]) VALUES (23, 8, 2, 4, 20000.0000, CAST(N'2021-10-28' AS Date))
+GO
+INSERT [dbo].[TB_Pedido_Detalle] ([ID], [idEncabezado], [idProducto], [numCantidad], [curValorUnitario], [dtmFechaCreacion]) VALUES (24, 8, 12, 2, 8000.0000, CAST(N'2021-10-28' AS Date))
+GO
+SET IDENTITY_INSERT [dbo].[TB_Pedido_Detalle] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TB_Pedido_Encabezado] ON 
+GO
+INSERT [dbo].[TB_Pedido_Encabezado] ([ID], [numPedido], [idUsuario], [curValorTotal], [dtmFechaCreacion]) VALUES (8, 8, 3, 186000.0000, CAST(N'2021-10-27' AS Date))
+GO
+INSERT [dbo].[TB_Pedido_Encabezado] ([ID], [numPedido], [idUsuario], [curValorTotal], [dtmFechaCreacion]) VALUES (9, 9, 3, 130000.0000, CAST(N'2021-10-27' AS Date))
+GO
+INSERT [dbo].[TB_Pedido_Encabezado] ([ID], [numPedido], [idUsuario], [curValorTotal], [dtmFechaCreacion]) VALUES (10, 10, 3, 32000.0000, CAST(N'2021-10-27' AS Date))
+GO
+INSERT [dbo].[TB_Pedido_Encabezado] ([ID], [numPedido], [idUsuario], [curValorTotal], [dtmFechaCreacion]) VALUES (11, 11, 3, 0.0000, CAST(N'2021-10-28' AS Date))
+GO
+SET IDENTITY_INSERT [dbo].[TB_Pedido_Encabezado] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TB_Producto] ON 
+GO
+INSERT [dbo].[TB_Producto] ([ID], [strDescripcion], [curValor]) VALUES (2, N'Camiseta futbol', 20000.0000)
+GO
+INSERT [dbo].[TB_Producto] ([ID], [strDescripcion], [curValor]) VALUES (8, N'Camiseta Basket', 30000.0000)
+GO
+INSERT [dbo].[TB_Producto] ([ID], [strDescripcion], [curValor]) VALUES (12, N'Balon', 8000.0000)
+GO
+SET IDENTITY_INSERT [dbo].[TB_Producto] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TB_Usuarios] ON 
+GO
+INSERT [dbo].[TB_Usuarios] ([ID], [strUsuario], [strPassword], [strNombre]) VALUES (3, N'Darkan', N'2222', N'Cristian David Gonzalez Restrepo')
+GO
+INSERT [dbo].[TB_Usuarios] ([ID], [strUsuario], [strPassword], [strNombre]) VALUES (4, N'Miscox', N'4321', N'David Restrepo')
+GO
+SET IDENTITY_INSERT [dbo].[TB_Usuarios] OFF
+GO
+ALTER TABLE [dbo].[TB_Pedido_Detalle] ADD  CONSTRAINT [DF_TB_Pedido_Detalle_dtmFechaCreacion]  DEFAULT (dateadd(hour,(-5),getdate())) FOR [dtmFechaCreacion]
+GO
+ALTER TABLE [dbo].[TB_Pedido_Encabezado] ADD  CONSTRAINT [DF_TB_Pedido_Encabezado_dtmFechaCreacion]  DEFAULT (dateadd(hour,(-5),getdate())) FOR [dtmFechaCreacion]
+GO
+ALTER TABLE [dbo].[TB_Pedido_Detalle]  WITH CHECK ADD FOREIGN KEY([idEncabezado])
+REFERENCES [dbo].[TB_Pedido_Encabezado] ([ID])
+GO
+ALTER TABLE [dbo].[TB_Pedido_Detalle]  WITH CHECK ADD FOREIGN KEY([idProducto])
+REFERENCES [dbo].[TB_Producto] ([ID])
+GO
+ALTER TABLE [dbo].[TB_Pedido_Encabezado]  WITH CHECK ADD FOREIGN KEY([idUsuario])
+REFERENCES [dbo].[TB_Usuarios] ([ID])
+GO
+/****** Object:  StoredProcedure [dbo].[Actualizar_Producto]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Actualizar_Producto]
+	@ID bigint,
+	@strDescripcion varchar(100),
+	@curValor money
+AS
+	UPDATE TB_Producto SET strDescripcion = @strDescripcion, curValor = @curValor where ID = @ID
+
+GO
+/****** Object:  StoredProcedure [dbo].[Actualizar_Usuario]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Actualizar_Usuario]
+	@ID bigint,
+	@strUsuario varchar(50),
+	@strPassword varchar(20),
+	@strNombre varchar(150)
+AS
+	UPDATE TB_Usuarios SET strUsuario = @strUsuario, strPassword = @strPassword, strNombre = @strNombre where ID = @ID
+
+GO
+/****** Object:  StoredProcedure [dbo].[Crear_Pedido]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Crear_Pedido]
+	@idUsuario bigint
+AS
+BEGIN
+	declare @intos table (id int);
+	declare @vID int;
+	If (select MAX(ID) from TB_Pedido_Encabezado) = NULL
+		Insert into TB_Pedido_Encabezado (numPedido, idUsuario, curValorTotal) 
+			output inserted.ID into @intos
+		values (1, @idUsuario, 0)
+	else
+		Insert into TB_Pedido_Encabezado (numPedido, idUsuario, curValorTotal) 
+			output inserted.ID into @intos
+		values ((select MAX(ID) from TB_Pedido_Encabezado)+1,@idUsuario, 0)
+
+	set @vID = (select id from @intos);
+	select @vID as id
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[Crear_Producto]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Crear_Producto]
+     @strDescripcion varchar(100),
+	 @curValor money
+AS   
+    Insert into TB_Producto (strDescripcion, curValor ) values (@strDescripcion,@curValor)
+GO
+/****** Object:  StoredProcedure [dbo].[Crear_Usuario]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Crear_Usuario]   
+     @strUsuario varchar(50),
+	 @strPassword varchar(20),
+	 @strNombre varchar(150)
+AS   
+    Insert into TB_Usuarios (strUsuario, strPassword, strNombre) values (@strUsuario,@strPassword,@strNombre)
+GO
+/****** Object:  StoredProcedure [dbo].[Eliminar_Producto]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Eliminar_Producto]
+	@ID bigint
+AS
+	DELETE from TB_Producto where ID = @ID
+GO
+/****** Object:  StoredProcedure [dbo].[Eliminar_Producto_Pedido]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Eliminar_Producto_Pedido]
+	@IDPedido bigint
+as
+BEGIN
+	declare @Cantidad int;
+	declare @ValorUnitario int;
+	declare @idEncabezado int;
+
+	set @Cantidad = (select numCantidad from TB_Pedido_Detalle where ID = @IDPedido)
+	set @ValorUnitario = (select curValorUnitario from TB_Pedido_Detalle where ID = @IDPedido)
+	set @idEncabezado = (select idEncabezado from TB_Pedido_Detalle where ID = @IDPedido)
+
+	DELETE FROM TB_Pedido_Detalle where ID = @IDPedido
+
+	update TB_Pedido_Encabezado set curValorTotal = (curValorTotal - ( @Cantidad * @ValorUnitario )) where ID = @idEncabezado
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[Eliminar_Usuario]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Eliminar_Usuario]
+	@ID bigint
+AS
+	DELETE from TB_Usuarios where ID = @ID
+GO
+/****** Object:  StoredProcedure [dbo].[Insertar_Producto]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Insertar_Producto]
+	@idEncabezado bigint,
+	@idProducto bigint,
+	@numCantidad int	
+AS
+BEGIN
+	declare @intos table (id int);
+	declare @ID int;
+	declare @curValorUnitario money;
+
+	set @curValorUnitario = (select curValor from TB_Producto where ID = @idProducto)
+	
+	Insert into TB_Pedido_Detalle (idEncabezado, idProducto, numCantidad, curValorUnitario) 
+		output inserted.ID into @intos
+	values (@idEncabezado,@idProducto,@numCantidad,@curValorUnitario)
+
+	 set @ID = (select id from @intos);
+	 --select @ID as id
+
+	update TB_Pedido_Encabezado set curValorTotal = (curValorTotal + (@numCantidad * @curValorUnitario)) where ID = @idEncabezado
+
+	exec Traer_Pedidos @idEncabezado
+END
+GO
+/****** Object:  StoredProcedure [dbo].[Listar_Pedidos]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Listar_Pedidos]
+	@ID bigint = 0
+AS
+BEGIN
+
+	IF @ID = 0
+		select 
+		PE.ID,
+		PD.ID as 'idPedido',
+		PE.numPedido,
+		P.strDescripcion,
+		PD.numCantidad,
+		PD.curValorUnitario
+		from TB_Pedido_Detalle PD
+		left join TB_Pedido_Encabezado PE
+		ON PE.ID = PD.idEncabezado
+		left join TB_Producto P 
+		on PD.idProducto = P.ID
+	ELSE
+		select 
+		PE.ID,
+		PD.ID as 'idPedido',
+		PE.numPedido,
+		P.strDescripcion,
+		PD.numCantidad,
+		PD.curValorUnitario
+		from TB_Pedido_Detalle PD
+		left join TB_Pedido_Encabezado PE
+		ON PE.ID = PD.idEncabezado
+		left join TB_Producto P 
+		on PD.idProducto = P.ID
+		WHERE PE.ID = @ID
+END
+GO
+/****** Object:  StoredProcedure [dbo].[Login_Usuario]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROC [dbo].[Login_Usuario]
+     @Usuario varchar(50),
+	 @Password varchar(20)
+AS
+		select * from TB_Usuarios where strUsuario = @Usuario AND strPassword = @Password
+GO
+/****** Object:  StoredProcedure [dbo].[Traer_Pedidos]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Traer_Pedidos]
+	@ID bigint = 0
+AS
+	IF @ID = 0
+		select 
+		PE.ID,
+		PE.numPedido,
+		U.ID as 'idUsuario',
+		U.strUsuario as 'nomUsuario',
+		U.strNombre,
+		PE.curValorTotal,
+		PE.dtmFechaCreacion
+		from TB_Pedido_Encabezado PE
+		left join TB_Usuarios U
+		on PE.idUsuario = U.ID
+	ELSE
+		select 
+		PE.ID,
+		PE.numPedido,
+		U.ID as 'idUsuario',
+		U.strUsuario as 'nomUsuario',
+		U.strNombre,
+		PE.curValorTotal,
+		PE.dtmFechaCreacion
+		from TB_Pedido_Encabezado PE
+		left join TB_Usuarios U
+		on PE.idUsuario = U.ID where PE.ID = @ID
+GO
+/****** Object:  StoredProcedure [dbo].[Traer_Productos]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Traer_Productos]
+     @ID bigint = 0
+AS   
+    IF @ID = 0
+		select * from TB_Producto
+	ELSE
+		select * from TB_Producto where ID = @ID
+GO
+/****** Object:  StoredProcedure [dbo].[Traer_Usuarios]    Script Date: 28/10/2021 10:25:21 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[Traer_Usuarios]
+     @ID bigint = 0
+AS   
+    IF @ID = 0
+		select * from TB_Usuarios
+	ELSE
+		select * from TB_Usuarios where ID = @ID
+GO
+USE [master]
+GO
+ALTER DATABASE [QvPedidos] SET  READ_WRITE 
+GO
