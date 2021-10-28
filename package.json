@@ -4,8 +4,8 @@
   "description": "prueba tecnica para QV Developers",
   "main": "index.js",
   "scripts": {
-    "start": "node public/index.js",
-    "dev": "nodemon src/index.js --exec babel-node",
+    "dev": "node public/index.js",
+    "start": "nodemon src/index.js --exec babel-node",
     "build": "babel src -d public"
   },
   "author": "Cristian Gonzalez",
